@@ -6,7 +6,7 @@ let buttons = document.querySelectorAll(".calc-btn");
 let previousNumber = ""; // talet före operatorn (t.ex. första "1" i 1 + 2)
 let currentNumber = "0"; // talet användaren skriver nu (visas på display)
 let activeOperator = null; // vilken operator som väntar (+ i level 1-mallen)
-let displayText = ""; // talet som visas på display skärmen
+// let displayText = ""; // talet som visas på display skärmen
 
 // Samma mönster som i lektion del 3: en lyssnare per knapp
 for (let i = 0; i < buttons.length; i++) {
