@@ -6,6 +6,7 @@ let buttons = document.querySelectorAll(".calc-btn");
 let previousNumber = ""; // talet före operatorn (t.ex. första "1" i 1 + 2)
 let currentNumber = "0"; // talet användaren skriver nu (visas på display)
 let activeOperator = null; // vilken operator som väntar (+ i level 1-mallen)
+let displayText = ""; // talet som visas på display skärmen
 
 // Samma mönster som i lektion del 3: en lyssnare per knapp
 for (let i = 0; i < buttons.length; i++) {
@@ -23,14 +24,16 @@ for (let i = 0; i < buttons.length; i++) {
     // --- Plus: spara första talet och börja skriva nästa ---
     else if (val === "+") {
       if (activeOperator === "+") {
-        previousNumber = currentNumber; // det som stod på display blir "första talet"
-        currentNumber = previousNumber; // nästa siffertal byggs upp från noll
-        display.innerText = " ";
+        let result = Number(previousNumber) + Number(currentNumber);
+        display.innerText = result;
+        currentNumber = String(result); // resultatet blir nytt "nuvarande tal"
+        activeOperator = null;
+        previousNumber = String(result);
       }
       activeOperator = "+";
       previousNumber = currentNumber; // det som stod på display blir "första talet"
       currentNumber = "0"; // nästa siffertal byggs upp från noll
-      display.innerText = previousNumber + "+";
+      display.innerText = previousNumber;
     }
     // --- Lika med: räkna ut om vi har en aktiv + ---
     else if (val === "=") {
