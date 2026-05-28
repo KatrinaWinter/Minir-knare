@@ -14,132 +14,109 @@ for (let i = 0; i < buttons.length; i++) {
     // data-value="1" i HTML → dataset.value === "1" här
     let val = e.target.dataset.value;
 
-    // --- Tömma / nollställa (C) ---
+    // Vägskäl: Vilken typ av knapp klickades?
     if (val === "C") {
-      previousNumber = "";
-      currentNumber = "0";
-      activeOperator = null;
-      display.innerText = "0";
-    }
-    // --- Plus: spara första talet och börja skriva nästa ---
-    else if (val === "+") {
-      if (activeOperator === "+") {
-        // Kollar först om det redan fins en delsumma att jobba med
-        let result = Number(previousNumber) + Number(currentNumber);
-        display.innerText = result;
-        currentNumber = String(result); // resultatet blir nytt "nuvarande tal"
-        activeOperator = null;
-        previousNumber = String(result);
-      }
-      //  Kör addition
-      activeOperator = "+";
-      previousNumber = currentNumber; // det som stod på display blir "första talet"
-      currentNumber = "0"; // nästa siffertal byggs upp från noll
-      display.innerText = previousNumber;
-    }
-    // --- Minus: spara första talet och börja skriva nästa ---
-    else if (val === "-") {
-      if (activeOperator === "-") {
-        // Kollar först om det redan fins en delsumma att jobba med
-        let result = Number(previousNumber) - Number(currentNumber);
-        display.innerText = result;
-        currentNumber = String(result);
-        activeOperator = null;
-        previousNumber = String(result);
-      }
-      //  Kör subtraktion
-      activeOperator = "-";
-      previousNumber = currentNumber;
-      currentNumber = "0";
-      display.innerText = previousNumber;
-    }
-    // --- Gånger: spara första talet och börja skriva nästa ---
-    else if (val === "*") {
-      if (activeOperator === "*") {
-        // Kollar först om det redan fins en delsumma att jobba med
-        let result = Number(previousNumber) * Number(currentNumber);
-        display.innerText = result;
-        currentNumber = String(result);
-        activeOperator = null;
-        previousNumber = String(result);
-      }
-      //  Kör multiplikation
-      activeOperator = "*";
-      previousNumber = currentNumber;
-      currentNumber = "0";
-      display.innerText = previousNumber;
-    }
-    // --- Divition: spara första talet och börja skriva nästa ---
-    else if (val === "/") {
-      // Kollar först om det redan fins en delsumma att jobba med
-      if (activeOperator === "/") {
-        let result = Number(previousNumber) / Number(currentNumber);
-        display.innerText = result;
-        currentNumber = String(result);
-        activeOperator = null;
-        previousNumber = String(result);
-      }
-      //  Kör divition
-      activeOperator = "/";
-      previousNumber = currentNumber;
-      currentNumber = "0";
-      display.innerText = previousNumber;
-    }
-    // --- Kvadrat: spara första talet och börja skriva nästa ---
-    else if (val === "**2") {
-      //  Kör kvadraten
-      let result = Number(currentNumber) ** 2;
-      display.innerText = result;
-      currentNumber = String(result);
-    }
-    // --- Roten: spara första talet och börja skriva nästa ---
-    else if (val === "sqrt") {
-      //  Kör kvadraten
-      let result = Math.sqrt(Number(currentNumber));
-      display.innerText = result;
-      currentNumber = String(result);
-    }
-
-    // --- Lika med: räkna ut om vi har en aktiv + - * /
-    else if (val === "=") {
-      if (activeOperator === "+") {
-        // Tal lagras som strängar — Number() gör om till tal innan addition
-        let result = Number(previousNumber) + Number(currentNumber);
-        display.innerText = result;
-        currentNumber = String(result); // resultatet blir nytt "nuvarande tal"
-        activeOperator = null;
-        previousNumber = null;
-      } else if (activeOperator === "-") {
-        // = förstår att det handlar om subtraction
-        let result = Number(previousNumber) - Number(currentNumber);
-        display.innerText = result;
-        currentNumber = String(result);
-        activeOperator = null;
-        previousNumber = null;
-      } else if (activeOperator === "*") {
-        // = förstår att det handlar om multiplikation
-        let result = Number(previousNumber) * Number(currentNumber);
-        display.innerText = result;
-        currentNumber = String(result);
-        activeOperator = null;
-        previousNumber = null;
-      } else if (activeOperator === "/") {
-        // = förstår att det handlar om divition
-        let result = Number(previousNumber) / Number(currentNumber);
-        display.innerText = result;
-        currentNumber = String(result);
-        activeOperator = null;
-        previousNumber = null;
-      }
-    }
-    // --- Siffror 1, 2, 3 ---
-    else {
-      if (currentNumber === "0") {
-        currentNumber = val; // ersätt startnollan
-      } else {
-        currentNumber += val; // bygg flersiffrigt tal: "1" + "2" → "12"
-      }
-      display.innerText = currentNumber;
+      handleReset();
+    } else if (val === "+") {
+      handlePlus();
+    } else if (val === "-") {
+      handleMinus();
+    } else if (val === "*") {
+      handleTimes();
+    } else if (val === "/") {
+      handleDivide();
+    } else if (val === "**2") {
+      handleRoot();
+    } else if (val === "sqrt") {
+      handleSquare();
+    } else if (val === "=") {
+      handleCalculate();
+    } else {
+      handleNumber(val);
     }
   });
+
+  // Nollställer hela minnet och displayen
+  function handleReset() {
+    previousNumber = "";
+    currentNumber = "0";
+    display.innerText = "0";
+    activeOperator = null;
+  }
+
+  // Hanterar siffror (klistrar ihop eller ersätter nollan)
+  function handleNumber(val) {
+    if (currentNumber === "0") {
+      currentNumber = val;
+    } else {
+      currentNumber += val;
+    }
+    display.innerText = currentNumber;
+  }
+
+  // Sparar operatorn och flyttar det första talet till "bakfickan"
+  function handlePlus() {
+    activeOperator = "+";
+    previousNumber = currentNumber;
+    currentNumber = "0";
+    display.innerText = "0";
+  }
+
+  function handleMinus() {
+    activeOperator = "-";
+    previousNumber = currentNumber;
+    currentNumber = "0";
+    display.innerText = "0";
+  }
+
+  function handleTimes() {
+    activeOperator = "*";
+    previousNumber = currentNumber;
+    currentNumber = "0";
+    display.innerText = "0";
+  }
+
+  function handleDivide() {
+    activeOperator = "/";
+    previousNumber = currentNumber;
+    currentNumber = "0";
+    display.innerText = "0";
+  }
+
+  function handleRoot() {
+    let result = Number(currentNumber) ** 2;
+    display.innerText = result;
+    currentNumber = String(result);
+  }
+
+  function handleSquare() {
+    let result = Math.sqrt(Number(currentNumber));
+    display.innerText = result;
+    currentNumber = String(result);
+  }
+
+  // Utför själva uträkningen när användaren trycker på lika med
+  function handleCalculate() {
+    if (activeOperator === "+") {
+      let result = Number(previousNumber) + Number(currentNumber);
+      display.innerText = result;
+      currentNumber = String(result); // Gör om till sträng för att kunna skriva vidare
+      activeOperator = null;
+    } else if (activeOperator === "-") {
+      let result = Number(previousNumber) - Number(currentNumber);
+      display.innerText = result;
+      currentNumber = String(result);
+      activeOperator = null;
+    } else if (activeOperator === "*") {
+      let result = Number(previousNumber) * Number(currentNumber);
+      display.innerText = result;
+      currentNumber = String(result);
+      activeOperator = null;
+    } else if (activeOperator === "/") {
+      let result = Number(previousNumber) / Number(currentNumber);
+      display.innerText = result;
+      currentNumber = String(result);
+      activeOperator = null;
+    }
+  }
 }
