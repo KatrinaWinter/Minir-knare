@@ -8,6 +8,8 @@ let currentNumber = "0"; // talet användaren skriver nu (visas på display)
 let activeOperator = null; // vilken operator som väntar (+ i level 1-mallen)
 // let displayText = ""; // talet som visas på display skärmen
 
+// .addEventListener("click",);
+
 // Samma mönster som i lektion del 3: en lyssnare per knapp
 for (let i = 0; i < buttons.length; i++) {
   buttons[i].addEventListener("click", function (e) {
@@ -48,6 +50,8 @@ for (let i = 0; i < buttons.length; i++) {
   function handleNumber(val) {
     if (currentNumber === "0") {
       currentNumber = val;
+    } else if (val === "." && currentNumber.includes(".")) {
+      return;
     } else {
       currentNumber += val;
     }
