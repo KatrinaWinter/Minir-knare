@@ -51,6 +51,7 @@ for (let i = 0; i < buttons.length; i++) {
     if (currentNumber === "0") {
       currentNumber = val;
     } else if (val === "." && currentNumber.includes(".")) {
+      // hanterar decimaler
       return;
     } else {
       currentNumber += val;
@@ -59,32 +60,61 @@ for (let i = 0; i < buttons.length; i++) {
   }
 
   // Sparar operatorn och flyttar det första talet till "bakfickan"
+
   function handlePlus() {
+    if (activeOperator === "+") {
+      let result = Number(previousNumber) + Number(currentNumber);
+      display.innerText = result;
+      previousNumber = String(result);
+      console.log(previousNumber, currentNumber);
+      currentNumber = "0";
+    } else {
+      previousNumber = currentNumber;
+      currentNumber = "0";
+    }
     activeOperator = "+";
-    previousNumber = currentNumber;
-    currentNumber = "0";
-    display.innerText = "0";
   }
 
   function handleMinus() {
+    if (activeOperator === "-") {
+      let result = Number(previousNumber) - Number(currentNumber);
+      display.innerText = result;
+      previousNumber = String(result);
+      console.log(previousNumber, currentNumber);
+      currentNumber = "0";
+    } else {
+      previousNumber = currentNumber;
+      currentNumber = "0";
+    }
     activeOperator = "-";
-    previousNumber = currentNumber;
-    currentNumber = "0";
-    display.innerText = "0";
   }
 
   function handleTimes() {
+    if (activeOperator === "*") {
+      let result = Number(previousNumber) * Number(currentNumber);
+      display.innerText = result;
+      previousNumber = String(result);
+      console.log(previousNumber, currentNumber);
+      currentNumber = "0";
+    } else {
+      previousNumber = currentNumber;
+      currentNumber = "0";
+    }
     activeOperator = "*";
-    previousNumber = currentNumber;
-    currentNumber = "0";
-    display.innerText = "0";
   }
 
   function handleDivide() {
+    if (activeOperator === "/") {
+      let result = Number(previousNumber) / Number(currentNumber);
+      display.innerText = result;
+      previousNumber = String(result);
+      console.log(previousNumber, currentNumber);
+      currentNumber = "0";
+    } else {
+      previousNumber = currentNumber;
+      currentNumber = "0";
+    }
     activeOperator = "/";
-    previousNumber = currentNumber;
-    currentNumber = "0";
-    display.innerText = "0";
   }
 
   function handleRoot() {
@@ -106,6 +136,7 @@ for (let i = 0; i < buttons.length; i++) {
       display.innerText = result;
       currentNumber = String(result); // Gör om till sträng för att kunna skriva vidare
       activeOperator = null;
+      previousNumber = null;
     } else if (activeOperator === "-") {
       let result = Number(previousNumber) - Number(currentNumber);
       display.innerText = result;
