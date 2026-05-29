@@ -7,8 +7,7 @@ let previousNumber = ""; // talet före operatorn (t.ex. första "1" i 1 + 2)
 let currentNumber = "0"; // talet användaren skriver nu (visas på display)
 let activeOperator = null; // vilken operator som väntar (+ i level 1-mallen)
 // let displayText = ""; // talet som visas på display skärmen
-
-// .addEventListener("click",);
+let justCalculated = false;
 
 // Samma mönster som i lektion del 3: en lyssnare per knapp
 for (let i = 0; i < buttons.length; i++) {
@@ -46,8 +45,34 @@ for (let i = 0; i < buttons.length; i++) {
     activeOperator = null;
   }
 
+  // Dörrvakt
+  function buttonGuard(disabled) {
+    for (let i = 0; i < buttons.length; i++) {
+      let value = buttons[i].dataset.value;
+
+      if (
+        value === "+" ||
+        value === "-" ||
+        value === "*" ||
+        value === "/" ||
+        value === "**2" ||
+        value === "sqrt" ||
+        value === "="
+      ) {
+        buttons[i].disabled = disabled;
+      }
+    }
+  }
+
   // Hanterar siffror (klistrar ihop eller ersätter nollan)
   function handleNumber(val) {
+    buttonGuard(false);
+    if (justCalculated) {
+      currentNumber = val;
+      justCalculated = false;
+      display.innerText = currentNumber;
+      return;
+    }
     if (currentNumber === "0") {
       currentNumber = val;
     } else if (val === "." && currentNumber.includes(".")) {
@@ -62,6 +87,7 @@ for (let i = 0; i < buttons.length; i++) {
   // Sparar operatorn och flyttar det första talet till "bakfickan"
 
   function handlePlus() {
+    buttonGuard(true);
     if (activeOperator === "+") {
       let result = Number(previousNumber) + Number(currentNumber);
       display.innerText = result;
@@ -75,6 +101,7 @@ for (let i = 0; i < buttons.length; i++) {
   }
 
   function handleMinus() {
+    buttonGuard(true);
     if (activeOperator === "-") {
       let result = Number(previousNumber) - Number(currentNumber);
       display.innerText = result;
@@ -88,6 +115,7 @@ for (let i = 0; i < buttons.length; i++) {
   }
 
   function handleTimes() {
+    buttonGuard(true);
     if (activeOperator === "*") {
       let result = Number(previousNumber) * Number(currentNumber);
       display.innerText = result;
@@ -101,6 +129,7 @@ for (let i = 0; i < buttons.length; i++) {
   }
 
   function handleDivide() {
+    buttonGuard(true);
     if (activeOperator === "/") {
       let result = Number(previousNumber) / Number(currentNumber);
       display.innerText = result;
@@ -114,12 +143,14 @@ for (let i = 0; i < buttons.length; i++) {
   }
 
   function handleRoot() {
+    buttonGuard(true);
     let result = Number(currentNumber) ** 2;
     display.innerText = result;
     currentNumber = String(result);
   }
 
   function handleSquare() {
+    buttonGuard(true);
     let result = Math.sqrt(Number(currentNumber));
     display.innerText = result;
     currentNumber = String(result);
@@ -127,10 +158,12 @@ for (let i = 0; i < buttons.length; i++) {
 
   // Utför själva uträkningen när användaren trycker på lika med
   function handleCalculate() {
+    buttonGuard(true);
     if (activeOperator === "+") {
       let result = Number(previousNumber) + Number(currentNumber);
       display.innerText = result;
       currentNumber = String(result); // Gör om till sträng för att kunna skriva vidare
+      justCalculated = true;
       activeOperator = null;
     } else if (activeOperator === "-") {
       let result = Number(previousNumber) - Number(currentNumber);
@@ -154,4 +187,5 @@ for (let i = 0; i < buttons.length; i++) {
       activeOperator = null;
     }
   }
+  buttonGuard(true);
 }
