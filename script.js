@@ -66,7 +66,6 @@ for (let i = 0; i < buttons.length; i++) {
       let result = Number(previousNumber) + Number(currentNumber);
       display.innerText = result;
       previousNumber = String(result);
-      console.log(previousNumber, currentNumber);
       currentNumber = "0";
     } else {
       previousNumber = currentNumber;
@@ -80,7 +79,6 @@ for (let i = 0; i < buttons.length; i++) {
       let result = Number(previousNumber) - Number(currentNumber);
       display.innerText = result;
       previousNumber = String(result);
-      console.log(previousNumber, currentNumber);
       currentNumber = "0";
     } else {
       previousNumber = currentNumber;
@@ -94,7 +92,6 @@ for (let i = 0; i < buttons.length; i++) {
       let result = Number(previousNumber) * Number(currentNumber);
       display.innerText = result;
       previousNumber = String(result);
-      console.log(previousNumber, currentNumber);
       currentNumber = "0";
     } else {
       previousNumber = currentNumber;
@@ -108,7 +105,6 @@ for (let i = 0; i < buttons.length; i++) {
       let result = Number(previousNumber) / Number(currentNumber);
       display.innerText = result;
       previousNumber = String(result);
-      console.log(previousNumber, currentNumber);
       currentNumber = "0";
     } else {
       previousNumber = currentNumber;
@@ -136,7 +132,6 @@ for (let i = 0; i < buttons.length; i++) {
       display.innerText = result;
       currentNumber = String(result); // Gör om till sträng för att kunna skriva vidare
       activeOperator = null;
-      previousNumber = null;
     } else if (activeOperator === "-") {
       let result = Number(previousNumber) - Number(currentNumber);
       display.innerText = result;
@@ -148,6 +143,11 @@ for (let i = 0; i < buttons.length; i++) {
       currentNumber = String(result);
       activeOperator = null;
     } else if (activeOperator === "/") {
+      if (currentNumber === "0") {
+        display.innerText = "Error";
+        activeOperator = null;
+        return;
+      }
       let result = Number(previousNumber) / Number(currentNumber);
       display.innerText = result;
       currentNumber = String(result);
