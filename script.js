@@ -64,6 +64,23 @@ for (let i = 0; i < buttons.length; i++) {
     }
   }
 
+  //   Tar bort repitation från matten
+  function mathShortcut(operator) {
+    let result;
+    if (operator === "+") {
+      result = Number(previousNumber) + Number(currentNumber);
+    } else if (operator === "-") {
+      result = Number(previousNumber) - Number(currentNumber);
+    } else if (operator === "*") {
+      result = Number(previousNumber) * Number(currentNumber);
+    } else if (operator === "/") {
+      result = Number(previousNumber) / Number(currentNumber);
+    }
+    display.innerText = result;
+    previousNumber = String(result);
+    currentNumber = "0";
+  }
+
   // Hanterar siffror (klistrar ihop eller ersätter nollan)
   function handleNumber(val) {
     buttonGuard(false);
@@ -88,11 +105,8 @@ for (let i = 0; i < buttons.length; i++) {
 
   function handlePlus() {
     buttonGuard(true);
-    if (activeOperator === "+") {
-      let result = Number(previousNumber) + Number(currentNumber);
-      display.innerText = result;
-      previousNumber = String(result);
-      currentNumber = "0";
+    if (activeOperator !== null) {
+      mathShortcut(activeOperator);
     } else {
       previousNumber = currentNumber;
       currentNumber = "0";
@@ -102,11 +116,8 @@ for (let i = 0; i < buttons.length; i++) {
 
   function handleMinus() {
     buttonGuard(true);
-    if (activeOperator === "-") {
-      let result = Number(previousNumber) - Number(currentNumber);
-      display.innerText = result;
-      previousNumber = String(result);
-      currentNumber = "0";
+    if (activeOperator !== null) {
+      mathShortcut(activeOperator);
     } else {
       previousNumber = currentNumber;
       currentNumber = "0";
@@ -116,11 +127,8 @@ for (let i = 0; i < buttons.length; i++) {
 
   function handleTimes() {
     buttonGuard(true);
-    if (activeOperator === "*") {
-      let result = Number(previousNumber) * Number(currentNumber);
-      display.innerText = result;
-      previousNumber = String(result);
-      currentNumber = "0";
+    if (activeOperator !== null) {
+      mathShortcut(activeOperator);
     } else {
       previousNumber = currentNumber;
       currentNumber = "0";
@@ -130,11 +138,8 @@ for (let i = 0; i < buttons.length; i++) {
 
   function handleDivide() {
     buttonGuard(true);
-    if (activeOperator === "/") {
-      let result = Number(previousNumber) / Number(currentNumber);
-      display.innerText = result;
-      previousNumber = String(result);
-      currentNumber = "0";
+    if (activeOperator !== null) {
+      mathShortcut(activeOperator);
     } else {
       previousNumber = currentNumber;
       currentNumber = "0";
