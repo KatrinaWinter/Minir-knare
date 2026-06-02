@@ -94,9 +94,12 @@ for (let i = 0; i < buttons.length; i++) {
       result = Number(previousNumber) - Number(currentNumber);
     } else if (operator === "*") {
       result = Number(previousNumber) * Number(currentNumber);
+    } else if (operator === "/") {
+      result = Number(previousNumber) / Number(currentNumber);
     }
     display.innerText = result;
     currentNumber = String(result); // Gör om till sträng för att kunna skriva vidare
+    justCalculated = true;
     activeOperator = null;
   }
 
@@ -191,10 +194,7 @@ for (let i = 0; i < buttons.length; i++) {
         activeOperator = null;
         return;
       }
-      let result = Number(previousNumber) / Number(currentNumber);
-      display.innerText = result;
-      currentNumber = String(result);
-      activeOperator = null;
+      handelShortcut(activeOperator);
     }
   }
   buttonGuard(true);
