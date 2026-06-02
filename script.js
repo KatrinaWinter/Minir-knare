@@ -81,7 +81,26 @@ for (let i = 0; i < buttons.length; i++) {
     currentNumber = "0";
   }
 
-  // Hanterar siffror (klistrar ihop eller ersätter nollan)
+  function mathShortcutBasic() {
+    previousNumber = currentNumber;
+    currentNumber = "0";
+  }
+
+  function handelShortcut(operator) {
+    let result;
+    if (operator === "+") {
+      result = Number(previousNumber) + Number(currentNumber);
+    } else if (operator === "-") {
+      result = Number(previousNumber) - Number(currentNumber);
+    } else if (operator === "*") {
+      result = Number(previousNumber) * Number(currentNumber);
+    }
+    display.innerText = result;
+    currentNumber = String(result); // Gör om till sträng för att kunna skriva vidare
+    activeOperator = null;
+  }
+
+  // Hanterar siffror och decimaler (klistrar ihop eller ersätter nollan)
   function handleNumber(val) {
     buttonGuard(false);
     if (justCalculated) {
@@ -108,8 +127,7 @@ for (let i = 0; i < buttons.length; i++) {
     if (activeOperator !== null) {
       mathShortcut(activeOperator);
     } else {
-      previousNumber = currentNumber;
-      currentNumber = "0";
+      mathShortcutBasic();
     }
     activeOperator = "+";
   }
@@ -119,8 +137,7 @@ for (let i = 0; i < buttons.length; i++) {
     if (activeOperator !== null) {
       mathShortcut(activeOperator);
     } else {
-      previousNumber = currentNumber;
-      currentNumber = "0";
+      mathShortcutBasic();
     }
     activeOperator = "-";
   }
@@ -130,8 +147,7 @@ for (let i = 0; i < buttons.length; i++) {
     if (activeOperator !== null) {
       mathShortcut(activeOperator);
     } else {
-      previousNumber = currentNumber;
-      currentNumber = "0";
+      mathShortcutBasic();
     }
     activeOperator = "*";
   }
@@ -141,8 +157,7 @@ for (let i = 0; i < buttons.length; i++) {
     if (activeOperator !== null) {
       mathShortcut(activeOperator);
     } else {
-      previousNumber = currentNumber;
-      currentNumber = "0";
+      mathShortcutBasic();
     }
     activeOperator = "/";
   }
@@ -165,21 +180,11 @@ for (let i = 0; i < buttons.length; i++) {
   function handleCalculate() {
     buttonGuard(true);
     if (activeOperator === "+") {
-      let result = Number(previousNumber) + Number(currentNumber);
-      display.innerText = result;
-      currentNumber = String(result); // Gör om till sträng för att kunna skriva vidare
-      justCalculated = true;
-      activeOperator = null;
+      handelShortcut(activeOperator);
     } else if (activeOperator === "-") {
-      let result = Number(previousNumber) - Number(currentNumber);
-      display.innerText = result;
-      currentNumber = String(result);
-      activeOperator = null;
+      handelShortcut(activeOperator);
     } else if (activeOperator === "*") {
-      let result = Number(previousNumber) * Number(currentNumber);
-      display.innerText = result;
-      currentNumber = String(result);
-      activeOperator = null;
+      handelShortcut(activeOperator);
     } else if (activeOperator === "/") {
       if (currentNumber === "0") {
         display.innerText = "Error";
