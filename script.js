@@ -18,8 +18,14 @@ for (let i = 0; i < buttons.length; i++) {
     // Vägskäl: Vilken typ av knapp klickades?
     if (val === "C") {
       handleReset();
-    } else if (val === "+" || val === "-" || val === "*" || val === "/") {
-      handleOperator(val);
+    } else if (val === "+") {
+      handlePlus();
+    } else if (val === "-") {
+      handleMinus();
+    } else if (val === "*") {
+      handleTimes();
+    } else if (val === "/") {
+      handleDivide();
     } else if (val === "**2") {
       handleSquare();
     } else if (val === "sqrt") {
@@ -30,188 +36,202 @@ for (let i = 0; i < buttons.length; i++) {
       handleNumber(val);
     }
   });
+}
+// Nollställer hela minnet och displayen
+function handleReset() {
+  previousNumber = "";
+  currentNumber = "0";
+  display.innerText = "0";
+  activeOperator = null;
+  justCalculated = false;
+  buttonGuard(true);
+}
 
-  // Nollställer hela minnet och displayen
-  function handleReset() {
-    previousNumber = "";
-    currentNumber = "0";
-    display.innerText = "0";
-    activeOperator = null;
-    justCalculated = false;
-    buttonGuard(true);
-  }
+// Dörrvakt
+function buttonGuard(disabled) {
+  for (let i = 0; i < buttons.length; i++) {
+    let value = buttons[i].dataset.value;
 
-  // Dörrvakt
-  function buttonGuard(disabled) {
-    for (let i = 0; i < buttons.length; i++) {
-      let value = buttons[i].dataset.value;
-
-      if (
-        value === "+" ||
-        value === "-" ||
-        value === "*" ||
-        value === "/" ||
-        value === "**2" ||
-        value === "sqrt" ||
-        value === "="
-      ) {
-        buttons[i].disabled = disabled;
-      }
+    if (
+      value === "+" ||
+      value === "-" ||
+      value === "*" ||
+      value === "/" ||
+      value === "**2" ||
+      value === "sqrt" ||
+      value === "="
+    ) {
+      buttons[i].disabled = disabled;
     }
   }
+}
 
-  //   Tar bort repitation från matten
-  function mathShortcut(operator) {
-    let result;
-    if (operator === "+") {
-      result = Number(previousNumber) + Number(currentNumber);
-    } else if (operator === "-") {
-      result = Number(previousNumber) - Number(currentNumber);
-    } else if (operator === "*") {
-      result = Number(previousNumber) * Number(currentNumber);
-    } else if (operator === "/") {
-      if (Number(currentNumber) === 0) {
-        display.innerText = "Error"; //?
-        previousNumber = "";
-        currentNumber = "0";
-        activeOperator = null;
-        justCalculated = true;
-        buttonGuard(true);
-        return;
-      }
-      result = Number(previousNumber) / Number(currentNumber);
-    }
-    display.innerText = result;
-    previousNumber = String(result);
-    currentNumber = "0";
-  }
-
-  function mathShortcutBasic() {
-    previousNumber = currentNumber;
-    currentNumber = "0";
-  }
-
-  function handelShortcut(operator) {
-    let result;
-    if (operator === "+") {
-      result = Number(previousNumber) + Number(currentNumber);
-    } else if (operator === "-") {
-      result = Number(previousNumber) - Number(currentNumber);
-    } else if (operator === "*") {
-      result = Number(previousNumber) * Number(currentNumber);
-    } else if (operator === "/") {
-      if (Number(currentNumber) === 0) {
-        display.innerText = "Error"; //?
-        previousNumber = "";
-        currentNumber = "0";
-        activeOperator = null;
-        justCalculated = true;
-        buttonGuard(true);
-        return;
-      }
-      result = Number(previousNumber) / Number(currentNumber);
-    }
-    display.innerText = result;
-    currentNumber = String(result); // Gör om till sträng för att kunna skriva vidare
-    justCalculated = true;
-    activeOperator = null;
-  }
-
-  // Hanterar siffror och decimaler (klistrar ihop eller ersätter nollan)
-  function handleNumber(val) {
-    buttonGuard(false);
-    if (justCalculated) {
-      currentNumber = val === "." ? "0." : val;
-      justCalculated = false;
-      display.innerText = currentNumber;
-      return;
-    }
-    if (val === "." && currentNumber.includes(".")) {
-      return;
-    } else if (val === ".") {
-      currentNumber += ".";
-    } else if (currentNumber === "0") {
-      currentNumber = val;
-    } else {
-      currentNumber += val;
-    }
-    display.innerText = currentNumber;
-  }
-
-  // Sparar operatorn och flyttar det första talet till "bakfickan"
-
-  function handlePlus() {
-    buttonGuard(true);
-    if (activeOperator !== null) {
-      mathShortcut(activeOperator);
-    } else {
-      mathShortcutBasic();
-    }
-    activeOperator = "+";
-  }
-
-  function handleMinus() {
-    buttonGuard(true);
-    if (activeOperator !== null) {
-      mathShortcut(activeOperator);
-    } else {
-      mathShortcutBasic();
-    }
-    activeOperator = "-";
-  }
-
-  function handleTimes() {
-    buttonGuard(true);
-    if (activeOperator !== null) {
-      mathShortcut(activeOperator);
-    } else {
-      mathShortcutBasic();
-    }
-    activeOperator = "*";
-  }
-
-  function handleDivide() {
-    buttonGuard(true);
-    if (activeOperator !== null) {
-      mathShortcut(activeOperator);
-    } else {
-      mathShortcutBasic();
-    }
-    activeOperator = "/";
-  }
-
-  function handleRoot() {
-    buttonGuard(true);
-    let result = Math.sqrt(Number(currentNumber));
-
-    if (Number(currentNumber) < 0) {
-      display.innerText = "Error";
+//   Tar bort repitation från matten
+function mathShortcut(operator) {
+  let result;
+  if (operator === "+") {
+    result = Number(previousNumber) + Number(currentNumber);
+  } else if (operator === "-") {
+    result = Number(previousNumber) - Number(currentNumber);
+  } else if (operator === "*") {
+    result = Number(previousNumber) * Number(currentNumber);
+  } else if (operator === "/") {
+    if (Number(currentNumber) === 0) {
+      display.innerText = "Error"; //?
+      previousNumber = "";
       currentNumber = "0";
-    } else {
-      display.innerText = result;
-      currentNumber = String(result);
+      activeOperator = null;
+      justCalculated = true;
+      buttonGuard(true);
+      return;
     }
-
-    previousNumber = "";
-    activeOperator = null;
-    justCalculated = true;
+    result = Number(previousNumber) / Number(currentNumber);
   }
+  display.innerText = result;
+  previousNumber = String(result);
+  currentNumber = "0";
+}
 
-  function handleSquare() {
-    buttonGuard(true);
-    let result = Number(currentNumber) ** 2;
+function mathShortcutBasic() {
+  previousNumber = currentNumber;
+  currentNumber = "0";
+}
+
+function handelShortcut(operator) {
+  let result;
+  if (operator === "+") {
+    result = Number(previousNumber) + Number(currentNumber);
+  } else if (operator === "-") {
+    result = Number(previousNumber) - Number(currentNumber);
+  } else if (operator === "*") {
+    result = Number(previousNumber) * Number(currentNumber);
+  } else if (operator === "/") {
+    if (Number(currentNumber) === 0) {
+      display.innerText = "Error"; //?
+      previousNumber = "";
+      currentNumber = "0";
+      activeOperator = null;
+      justCalculated = true;
+      buttonGuard(true);
+      return;
+    }
+    result = Number(previousNumber) / Number(currentNumber);
+  }
+  display.innerText = result;
+  currentNumber = String(result); // Gör om till sträng för att kunna skriva vidare
+  justCalculated = true;
+  activeOperator = null;
+}
+
+// Hanterar siffror och decimaler (klistrar ihop eller ersätter nollan)
+function handleNumber(val) {
+  buttonGuard(false);
+
+  if (justCalculated || activeOperator !== null) {
+    currentNumber = val === "." ? "0." : val;
+    justCalculated = false;
+    display.innerText = currentNumber;
+    return;
+  }
+  if (val === "." && currentNumber.includes(".")) {
+    return;
+  } else if (val === ".") {
+    currentNumber += ".";
+  } else if (currentNumber === "0") {
+    currentNumber = val;
+  } else {
+    currentNumber += val;
+  }
+  display.innerText = currentNumber;
+}
+
+// Sparar operatorn och flyttar det första talet till "bakfickan"
+
+function handlePlus() {
+  buttonGuard(true);
+
+  if (justCalculated) {
+    previousNumber = currentNumber;
+    justCalculated = false;
+  } else if (activeOperator !== null) {
+    mathShortcut(activeOperator);
+  } else {
+    mathShortcutBasic();
+  }
+  activeOperator = "+";
+  buttonGuard(true);
+}
+
+function handleMinus() {
+  buttonGuard(true);
+  if (justCalculated) {
+    previousNumber = currentNumber;
+    justCalculated = false;
+  } else if (activeOperator !== null) {
+    mathShortcut(activeOperator);
+  } else {
+    mathShortcutBasic();
+  }
+  activeOperator = "-";
+}
+
+function handleTimes() {
+  buttonGuard(true);
+  if (justCalculated) {
+    previousNumber = currentNumber;
+    justCalculated = false;
+  } else if (activeOperator !== null) {
+    mathShortcut(activeOperator);
+  } else {
+    mathShortcutBasic();
+  }
+  activeOperator = "*";
+}
+
+function handleDivide() {
+  buttonGuard(true);
+  if (justCalculated) {
+    previousNumber = currentNumber;
+    justCalculated = false;
+  } else if (activeOperator !== null) {
+    mathShortcut(activeOperator);
+  } else {
+    mathShortcutBasic();
+  }
+  activeOperator = "/";
+}
+
+function handleRoot() {
+  buttonGuard(false);
+  let result = Math.sqrt(Number(currentNumber));
+
+  if (Number(currentNumber) < 0) {
+    display.innerText = "Error";
+    currentNumber = "0";
+  } else {
     display.innerText = result;
     currentNumber = String(result);
-    previousNumber = "";
-    activeOperator = null;
-    justCalculated = true;
   }
 
-  // Utför själva uträkningen när användaren trycker på lika med
-  function handleCalculate() {
-    if (activeOperator !== null) {
-      handelShortcut(activeOperator);
-    }
+  previousNumber = "";
+  //activeOperator = null;
+  justCalculated = true;
+}
+
+function handleSquare() {
+  buttonGuard(false);
+  let result = Number(currentNumber) ** 2;
+  display.innerText = result;
+  currentNumber = String(result);
+  previousNumber = "";
+  //activeOperator = null;
+  justCalculated = true;
+}
+
+// Utför själva uträkningen när användaren trycker på lika med
+function handleCalculate() {
+  if (activeOperator !== null) {
+    handelShortcut(activeOperator);
   }
 }
 
