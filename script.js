@@ -13,23 +13,17 @@ let justCalculated = false;
 for (let i = 0; i < buttons.length; i++) {
   buttons[i].addEventListener("click", function (e) {
     // data-value="1" i HTML → dataset.value === "1" här
-    let val = e.target.dataset.value;
+    const val = e.currentTarget.dataset.value;
 
     // Vägskäl: Vilken typ av knapp klickades?
     if (val === "C") {
       handleReset();
-    } else if (val === "+") {
-      handlePlus();
-    } else if (val === "-") {
-      handleMinus();
-    } else if (val === "*") {
-      handleTimes();
-    } else if (val === "/") {
-      handleDivide();
+    } else if (val === "+" || val === "-" || val === "*" || val === "/") {
+      handleOperator(val);
     } else if (val === "**2") {
-      handleRoot();
-    } else if (val === "sqrt") {
       handleSquare();
+    } else if (val === "sqrt") {
+      handleRoot();
     } else if (val === "=") {
       handleCalculate();
     } else {
@@ -43,6 +37,8 @@ for (let i = 0; i < buttons.length; i++) {
     currentNumber = "0";
     display.innerText = "0";
     activeOperator = null;
+    justCalculated = false;
+    buttonGuard(true);
   }
 
   // Dörrvakt
@@ -74,6 +70,15 @@ for (let i = 0; i < buttons.length; i++) {
     } else if (operator === "*") {
       result = Number(previousNumber) * Number(currentNumber);
     } else if (operator === "/") {
+      if (Number(currentNumber) === 0) {
+        display.innerText = "Error"; //?
+        previousNumber = "";
+        currentNumber = "0";
+        activeOperator = null;
+        justCalculated = true;
+        buttonGuard(true);
+        return;
+      }
       result = Number(previousNumber) / Number(currentNumber);
     }
     display.innerText = result;
@@ -95,6 +100,15 @@ for (let i = 0; i < buttons.length; i++) {
     } else if (operator === "*") {
       result = Number(previousNumber) * Number(currentNumber);
     } else if (operator === "/") {
+      if (Number(currentNumber) === 0) {
+        display.innerText = "Error"; //?
+        previousNumber = "";
+        currentNumber = "0";
+        activeOperator = null;
+        justCalculated = true;
+        buttonGuard(true);
+        return;
+      }
       result = Number(previousNumber) / Number(currentNumber);
     }
     display.innerText = result;
@@ -107,16 +121,17 @@ for (let i = 0; i < buttons.length; i++) {
   function handleNumber(val) {
     buttonGuard(false);
     if (justCalculated) {
-      currentNumber = val;
+      currentNumber = val === "." ? "0." : val;
       justCalculated = false;
       display.innerText = currentNumber;
       return;
     }
-    if (currentNumber === "0") {
-      currentNumber = val;
-    } else if (val === "." && currentNumber.includes(".")) {
-      // hanterar decimaler
+    if (val === "." && currentNumber.includes(".")) {
       return;
+    } else if (val === ".") {
+      currentNumber += ".";
+    } else if (currentNumber === "0") {
+      currentNumber = val;
     } else {
       currentNumber += val;
     }
@@ -167,35 +182,38 @@ for (let i = 0; i < buttons.length; i++) {
 
   function handleRoot() {
     buttonGuard(true);
-    let result = Number(currentNumber) ** 2;
-    display.innerText = result;
-    currentNumber = String(result);
+    let result = Math.sqrt(Number(currentNumber));
+
+    if (Number(currentNumber) < 0) {
+      display.innerText = "Error";
+      currentNumber = "0";
+    } else {
+      display.innerText = result;
+      currentNumber = String(result);
+    }
+
+    previousNumber = "";
+    activeOperator = null;
+    justCalculated = true;
   }
 
   function handleSquare() {
     buttonGuard(true);
-    let result = Math.sqrt(Number(currentNumber));
+    let result = Number(currentNumber) ** 2;
     display.innerText = result;
     currentNumber = String(result);
+    previousNumber = "";
+    activeOperator = null;
+    justCalculated = true;
   }
 
   // Utför själva uträkningen när användaren trycker på lika med
   function handleCalculate() {
-    buttonGuard(true);
-    if (activeOperator === "+") {
-      handelShortcut(activeOperator);
-    } else if (activeOperator === "-") {
-      handelShortcut(activeOperator);
-    } else if (activeOperator === "*") {
-      handelShortcut(activeOperator);
-    } else if (activeOperator === "/") {
-      if (currentNumber === "0") {
-        display.innerText = "Error";
-        activeOperator = null;
-        return;
-      }
+    if (activeOperator !== null) {
       handelShortcut(activeOperator);
     }
   }
-  buttonGuard(true);
 }
+
+// Inaktiverar räkneknapparna tills användaren skriver ett tal
+buttonGuard(true);
