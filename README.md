@@ -1,21 +1,29 @@
-Mini Calculator
+<h1> Mini Calculator </h1>
 An interactive calculator built as a learning project to practise JavaScript and frontend development.
 
-Features
-Basic arithmetic operations
-Additional mathematical functions
-Interactive buttons and calculator display
-Visual feedback when interacting with buttons
-Technologies
-HTML5
-CSS3
-JavaScript
-Live Demo
+<h2> Features </h2>
+<ol>
+<li>Basic arithmetic operations</li>
+<li>Additional mathematical functions</li>
+<li>Interactive buttons and calculator display</li>
+<li>Visual feedback when interacting with buttons</li>
+</ol>
+
+<h2>Technologies </h2>
+<ol>
+<li>HTML5</li>
+<li>CSS3</li>
+<li>JavaScript</li>
+</ol>
+
+  <h2>Live Demo </h2>
 Try the calculator: https://katrinawinter.github.io/Minir-knare/
 
-What I Learned
+<h2>What I Learned </h2>
 This project helped me practise JavaScript logic, event handling, DOM manipulation, and connecting user interactions to functionality. I also worked on styling the interface and improving the user experience.
 
-Future Improvements
-Further improve input validation and error handling
-Continue refining the user interface and accessibility
+<h2>Future Improvements </h2>
+<ol>
+<li>Further improve input validation and error handling</li>
+<li>Continue refining the user interface and accessibility</li>
+</ol>
