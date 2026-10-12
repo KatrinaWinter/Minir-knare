@@ -21,9 +21,3 @@ Try the calculator: https://katrinawinter.github.io/Minir-knare/
 
 <h2>What I Learned </h2>
 This project helped me practise JavaScript logic, event handling, DOM manipulation, and connecting user interactions to functionality. I also worked on styling the interface and improving the user experience.
-
-<h2>Future Improvements </h2>
-<ul>
-<li>Further improve input validation and error handling</li>
-<li>Continue refining the user interface and accessibility</li>
-</ul>
